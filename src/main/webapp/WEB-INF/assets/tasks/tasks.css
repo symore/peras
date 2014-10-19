@@ -1,0 +1,11 @@
+.done {
+	text-decoration: line-through;
+}
+
+.panel-menu {
+	float: right;
+}
+
+.btn-calendar {
+	font-size: 20px;
+}

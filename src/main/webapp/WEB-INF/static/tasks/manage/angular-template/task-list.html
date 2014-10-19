@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-md-4" ng-repeat="category in categoryList">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        {{category.name}}
+        <span ng-controller="ArchiveTasksController" ng-click="archiveTasks(category.categoryId)" class="glyphicon glyphicon-trash panel-menu" />
+      </div>
+      <ul ui-sortable="tasklistSortable" class="list-group">
+        <li id="{{task.taskId}}" ng-class="{done: task.done}" class="list-group-item"
+          ng-repeat="task in taskList | filter: {categoryId : category.categoryId} : true track by task.taskId ">
+          <div class="row">
+            <div class="col-md-6">
+              <input ng-controller="FinishTaskController" ng-model="task.done" ng-change="finishTask(task)" type="checkbox" />
+              {{task.summary}}
+            </div>
+            <div class="col-md-4">{{task.estimation}} {{task.estimationPortion}}</div>
+            <div class="col-md-2">
+              <span ng-controller="DeleteTaskController" ng-click="deleteTask(task.taskId)" class="glyphicon glyphicon-remove" />
+            </div>
+            <input type="hidden" ng-value="task.nextTask" />
+          </div>
+        </li>
+      </ul>
+      <div class="panel-footer" ng-controller="CreateTaskCtrl">
+        <form ng-submit="createTask()">
+          <p class="form-group">
+            <input class="form-control" type="text" ng-model="task.summary" placeholder="Task name" />
+          </p>
+          <div class="form-group row">
+            <div class="col-md-6">
+              <div class="input-group">
+                <input class="form-control" type="text" ng-model="task.estimation" placeholder="Est." />
+                <div class="input-group-btn" dropdown is-open="status.isopen">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span ng-init="task.estimationPortion=estimationPortions[0].value" ng-model="task.estimationPortion">{{task.estimationPortion}}</span>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li class="dropdown-toggle" on-toggle="toggled(open)" ng-repeat="portion in estimationPortions"
+                      ng-click="task.estimationPortion=portion.value">
+                      <a href="#">{{portion.label}}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="input-group" ng-controller="DatePickerController">
+                <input disabled type="text" class="form-control" datepicker-popup="dd-MM-yyyy" ng-model="task.deadline" datepicker-options="dateOptions"
+                  close-text="Close" is-open="opened" placeholder="Deadline" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-calendar btn-default" ng-click="open($event)">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                  </button>
+                </span>
+              </div>
+            </div>            
+          </div>
+          <input type="hidden" ng-value="category.categoryId" />
+          <p class="form-group">          
+          <input class="btn btn-success" type="submit" value="Add" />
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

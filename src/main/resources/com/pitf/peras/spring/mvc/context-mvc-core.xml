@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+  <context:property-placeholder location="classpath:com/pitf/peras/spring/mvc/requestmappings/*.properties" />
+
+  <context:component-scan base-package="com.pitf.peras.*.web.*" />
+
+
+  <mvc:resources location="/WEB-INF/static/tasks/" mapping="/tasks/**" />
+  <mvc:resources location="/WEB-INF/static/categories/" mapping="/categories/**" />
+  <mvc:resources location="/WEB-INF/assets/" mapping="/assets/**" />
+  <mvc:resources location="/WEB-INF/static/angular-ui/template/" mapping="/template/**" />
+  
+
+  <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+  <bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
+  </bean>
+
+  <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+    <property name="definitions">
+      <list>
+        <value>/WEB-INF/tiles/tiles-*.xml</value>
+      </list>
+    </property>
+  </bean>
+
+    <bean id="perasConversionService"
+      class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    <property name="formatters">
+        <list>
+            <bean class="com.pitf.peras.task.web.formatter.EstimationPortionFormatter"/>
+        </list>
+    </property>
+</bean>
+
+  <mvc:annotation-driven conversion-service="perasConversionService"/>
+</beans>
