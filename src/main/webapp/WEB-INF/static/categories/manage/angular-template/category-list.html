@@ -1,0 +1,8 @@
+<div>
+  <ul class="list-group">
+    <li id="{{category.categoryId}}" class="list-group-item" ng-repeat="category in categoryList track by category.categoryId">{{category.name}}
+      <span ng-controller="DeleteCategoryController" ng-click="deleteCategory($index)" class="glyphicon glyphicon-remove" />
+    </li>
+  </ul>
+
+</div>

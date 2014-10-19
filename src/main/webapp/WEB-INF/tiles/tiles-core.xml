@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+  <definition name="defaultTemplate" template="/WEB-INF/pages/template/default/template-default.jsp">
+    <!-- put-attribute name="header" value="/WEB-INF/pages/template/default/header-default.jsp" / -->
+    <put-attribute name="menu" value="/WEB-INF/pages/template/default/menu-default.jsp" />
+    <!-- put-attribute name="footer" value="/WEB-INF/pages/template/default/footer-default.jsp" / -->
+  </definition>
+
+  <definition name="loginTemplate" template="/WEB-INF/pages/template/authentication/template-login.jsp">
+  </definition>
+
+  <definition name="tasks-home" extends="defaultTemplate">
+    <put-attribute name="body" value="/WEB-INF/pages/tasks/tasks-home.jsp" />
+  </definition>
+
+  <definition name="manage-tasks" extends="defaultTemplate">
+    <put-attribute name="body" value="/WEB-INF/pages/tasks/manage-tasks.jsp" />
+  </definition>
+
+  <definition name="manage-categories" extends="defaultTemplate">
+    <put-attribute name="body" value="/WEB-INF/pages/categories/manage-categories.jsp" />
+  </definition>
+
+  <definition name="login-form" extends="loginTemplate">
+    <put-attribute name="body" value="/WEB-INF/pages/login/login_form.jsp" />
+  </definition>
+
+</tiles-definitions>

@@ -1,0 +1,9 @@
+<div>
+  <h1>Task: {{task.summary}}</h1>
+  <h3>Estimated time: {{task.estimation}} {{task.estimationPortion}}</31>
+  <div class="modal-footer">
+    <button ng-hide="hideStart" class="btn btn-primary" ng-click="start()">Start</button>
+    <button ng-hide="hideDone" class="btn btn-warning" ng-click="done()">Done</button>
+    <button ng-hide="hideOk" class="btn btn-warning" ng-click="ok()">Ok</button>
+  </div>
+</div>
