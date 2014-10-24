@@ -45,6 +45,12 @@ public class TaskFacade {
 		return taskService.listUsersTasks(getCurrentUser().getUserId());
 	}
 
+	public List<Task> listUrgentTasks() {
+		TaskRetrievalParameters taskRetrievalParameters = new TaskRetrievalParameters(
+				null, getCurrentUser().getUserId(), null);
+		return taskService.listUrgentTasks(taskRetrievalParameters);
+	}
+
 	public Task getNextTask(TaskQuery taskQuery) {
 		TaskRetrievalParameters taskRetrievalParameters = new TaskRetrievalParameters(
 				taskQuery.getCategoryIds(), getCurrentUser().getUserId(),

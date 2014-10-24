@@ -15,6 +15,7 @@ public class TaskView {
 	private Date deadline;
 	private boolean isDoable;
 	private Date startDate;
+	private String categoryName;
 
 	public String getSummary() {
 		return summary;
@@ -94,6 +95,14 @@ public class TaskView {
 
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 }

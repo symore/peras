@@ -8,6 +8,8 @@ public class Category {
 	private Long userId;
 	private List<String> messages;
 	private CategoryStatus categoryStatus;
+	private Long warningThreshold;
+	private Long dangerThreshold;
 
 	public Long getCategoryId() {
 		return categoryId;
@@ -47,6 +49,22 @@ public class Category {
 
 	public void setCategoryStatus(CategoryStatus categoryStatus) {
 		this.categoryStatus = categoryStatus;
+	}
+
+	public Long getDangerThreshold() {
+		return dangerThreshold;
+	}
+
+	public void setDangerThreshold(Long dangerThreshold) {
+		this.dangerThreshold = dangerThreshold;
+	}
+
+	public Long getWarningThreshold() {
+		return warningThreshold;
+	}
+
+	public void setWarningThreshold(Long warningThreshold) {
+		this.warningThreshold = warningThreshold;
 	}
 
 }

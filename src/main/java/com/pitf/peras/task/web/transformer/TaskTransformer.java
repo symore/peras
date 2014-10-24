@@ -26,6 +26,8 @@ public class TaskTransformer {
 		TaskView result = new TaskView();
 		result.setCategoryId(task.getCategory() == null ? null : task
 				.getCategory().getCategoryId());
+		result.setCategoryName(task.getCategory() == null ? null : task
+				.getCategory().getName());
 		result.setEstimation(task.getEstimation());
 		result.setNextTask(task.getNext());
 		result.setSummary(task.getSummary());

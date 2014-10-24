@@ -25,6 +25,11 @@
     <put-attribute name="body" value="/WEB-INF/pages/categories/manage-categories.jsp" />
   </definition>
 
+  <definition name="overview" extends="defaultTemplate">
+    <put-attribute name="body" value="/WEB-INF/pages/overview/overview.jsp" />
+  </definition>
+
+
   <definition name="login-form" extends="loginTemplate">
     <put-attribute name="body" value="/WEB-INF/pages/login/login_form.jsp" />
   </definition>

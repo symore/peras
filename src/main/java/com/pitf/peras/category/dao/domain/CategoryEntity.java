@@ -23,6 +23,10 @@ public class CategoryEntity {
 	private String name;
 	@Column(name = "user_id")
 	private Long userId;
+	@Column(name = "warning_threshold")
+	private Long warningThreshold;
+	@Column(name = "danger_threshold")
+	private Long dangerThreshold;
 	@OneToMany(mappedBy = "categoryEntity")
 	private Collection<TaskEntity> taskEntity;
 
@@ -56,6 +60,22 @@ public class CategoryEntity {
 
 	public void setTaskEntity(Collection<TaskEntity> taskEntity) {
 		this.taskEntity = taskEntity;
+	}
+
+	public Long getWarningThreshold() {
+		return warningThreshold;
+	}
+
+	public void setWarningThreshold(Long warningThreshold) {
+		this.warningThreshold = warningThreshold;
+	}
+
+	public Long getDangerThreshold() {
+		return dangerThreshold;
+	}
+
+	public void setDangerThreshold(Long dangerThreshold) {
+		this.dangerThreshold = dangerThreshold;
 	}
 
 }

@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.pitf.peras.category.dao.domain.CategoryEntity;
+import com.pitf.peras.category.dao.domain.LastTouchedCategoryViewEntity;
 
 @Entity(name = "v_task")
 public class TaskViewEntity {
@@ -22,6 +23,9 @@ public class TaskViewEntity {
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private CategoryEntity categoryEntity;
+	@ManyToOne
+	@JoinColumn(name = "category_id", insertable = false, updatable = false)
+	private LastTouchedCategoryViewEntity lastTouchedCategoryViewEntity;
 	@Column(name = "user_id")
 	private Long userId;
 	@Column
@@ -123,6 +127,15 @@ public class TaskViewEntity {
 
 	public void setDeadline(Date deadline) {
 		this.deadline = deadline;
+	}
+
+	public LastTouchedCategoryViewEntity getLastTouchedCategoryViewEntity() {
+		return lastTouchedCategoryViewEntity;
+	}
+
+	public void setLastTouchedCategoryViewEntity(
+			LastTouchedCategoryViewEntity lastTouchedCategoryViewEntity) {
+		this.lastTouchedCategoryViewEntity = lastTouchedCategoryViewEntity;
 	}
 
 }

@@ -160,7 +160,18 @@
           <war>${project.basedir}/mim-webapp/target/mim-webapp.war</war>
         </configuration>
       </plugin>
-
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <path>/peras</path>
+          <update>true</update>
+          <url>http://localhost:8079/manager/text</url>
+          <username>tomcat</username>
+          <password>tomcatuser</password>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 

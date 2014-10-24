@@ -34,6 +34,8 @@ public class CreateCategoryController {
 			CreateCategoryRequest createCategoryRequest) {
 		Category result = new Category();
 		result.setName(createCategoryRequest.getName());
+		result.setDangerThreshold(createCategoryRequest.getDangerThreshold());
+		result.setWarningThreshold(createCategoryRequest.getWarningThreshold());
 		return result;
 	}
 }

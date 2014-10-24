@@ -275,4 +275,12 @@ public class TaskService {
 		taskArchiveEntity.setUserId(taskEntity.getUserId());
 		taskArchiveDao.save(taskArchiveEntity);
 	}
+
+	public List<Task> listUrgentTasks(
+			TaskRetrievalParameters taskRetrievalParameters) {
+		List<TaskViewEntity> result = null;
+		result = retrieveTaskDao.findAll(new TaskSpecifications()
+				.getUrgentTasks(taskRetrievalParameters));
+		return transformTaskEntities(result);
+	}
 }

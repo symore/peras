@@ -41,6 +41,8 @@ public class CategoryService {
 		result.setCategoryId(categoryEntity.getCategoryId());
 		result.setName(categoryEntity.getName());
 		result.setUserId(categoryEntity.getUserId());
+		result.setWarningThreshold(categoryEntity.getWarningThreshold());
+		result.setDangerThreshold(categoryEntity.getDangerThreshold());
 		return result;
 	}
 
@@ -49,6 +51,8 @@ public class CategoryService {
 		result.setCategoryId(category.getCategoryId());
 		result.setName(category.getName());
 		result.setUserId(category.getUserId());
+		result.setWarningThreshold(category.getWarningThreshold());
+		result.setDangerThreshold(category.getDangerThreshold());
 		return result;
 	}
 

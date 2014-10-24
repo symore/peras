@@ -7,4 +7,5 @@
   <li class="${fn:endsWith(servletPath, '/') ? 'active' : ''}"><a href="<c:url value="/" />">Home</a></li>
   <li class="${fn:endsWith(servletPath, '/tasks/manage-tasks.html') ? 'active' : ''}"><a href="<c:url value="/tasks/manage-tasks.html" />">Manage Tasks</a></li>
   <li class="${fn:endsWith(servletPath, '/categories/manage-categories.html') ? 'active' : ''}"><a href="<c:url value="/categories/manage-categories.html" />">Manage Categories</a></li>
+  <li class="${fn:endsWith(servletPath, '/overview/overview.html') ? 'active' : ''}"><a href="<c:url value="/overview/overview.html" />">Overview</a></li>
 </ul>

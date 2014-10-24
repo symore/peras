@@ -15,6 +15,8 @@
     <div ng-controller="CreateCategoryController">
       <form ng-submit="createCategory()">
         <input type="text" ng-model="category.name" placeholder="Category name" />
+        <input type="text" ng-model="category.warningThreshold" placeholder="Warning Threshold" />
+        <input type="text" ng-model="category.dangerThreshold" placeholder="Danger Threshold" />
         <input type="submit" value="Add" />
       </form>
     </div>

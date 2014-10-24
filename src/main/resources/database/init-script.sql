@@ -4,7 +4,8 @@ CREATE TABLE t_category
   category_id bigint NOT NULL,
   name character varying(255),
   user_id bigint,
-  last_worked_on timestamp with time zone,
+  warning_threshold bigint,
+  danger_threshold bigint,
   CONSTRAINT t_category_pkey PRIMARY KEY (category_id)
 );
 
@@ -78,3 +79,20 @@ SELECT distinct row_number() over () as rownum, s.* FROM search_tasks s order by
 CREATE VIEW v_task_archive AS
 SELECT t.task_id, t.estimation, t.summary, t.user_id, COALESCE ((SELECT name FROM t_category WHERE category_id = t.category_id), t.category_name), t.next, t.done, t.creation_date, t.done_date, t.start_date, t.deadline
 FROM t_task_archive t
+
+
+CREATE VIEW v_last_touched_category AS
+SELECT  last_touched.*
+    , date_trunc('day', last_touched.last_touched) + (warning_threshold || ' minutes')::interval as warning
+    , date_trunc('day', last_touched.last_touched) + (danger_threshold || ' minutes')::interval as danger FROM t_category c, (
+    SELECT c.name AS name, c.category_id AS category_id, max(t.done_date) AS last_touched FROM (
+        SELECT * FROM (
+            SELECT category_id, done_date FROM t_task_archive 
+            UNION 
+            SELECT category_id, done_date FROM t_task
+        ) AS u
+        WHERE u.done_date IS NOT NULL) AS t, t_category c
+    WHERE t.category_id = c.category_id
+    GROUP BY c.category_id, c.name
+) AS last_touched
+WHERE c.category_id = last_touched.category_id;
