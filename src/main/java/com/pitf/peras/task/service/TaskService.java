@@ -92,6 +92,9 @@ public class TaskService {
 		result.setDone(taskEntity.isDone());
 		result.setStartDate(taskEntity.getStartDate());
 		result.setDeadline(taskEntity.getDeadline());
+		result.setRecurrenceMeasure(taskEntity.getRecurrenceMeasure());
+		result.setRecurring(taskEntity.isRecurring());
+		result.setRecurrenceValue(taskEntity.getRecurrenceValue());
 		transformToConformEstimation(result);
 		return result;
 	}
@@ -108,6 +111,9 @@ public class TaskService {
 		result.setCategoryEntity(categoryEntity);
 		result.setCreationDate(new Date());
 		result.setDeadline(task.getDeadline());
+		result.setRecurring(task.isRecurring());
+		result.setRecurrenceMeasure(task.getRecurrenceMeasure());
+		result.setRecurrenceValue(task.getRecurrenceValue());
 		return result;
 	}
 
@@ -131,6 +137,9 @@ public class TaskService {
 			task.setDone(taskEntity.isDone());
 			task.setDeadline(taskEntity.getDeadline());
 			task.setStartDate(taskEntity.getStartDate());
+			task.setRecurrenceMeasure(taskEntity.getRecurrenceMeasure());
+			task.setRecurrenceValue(taskEntity.getRecurrenceValue());
+			task.setRecurring(taskEntity.isRecurring());
 			result.add(task);
 			transformToConformEstimation(task);
 		}
@@ -273,6 +282,10 @@ public class TaskService {
 		taskArchiveEntity.setSummary(taskEntity.getSummary());
 		taskArchiveEntity.setTaskId(taskEntity.getTaskId());
 		taskArchiveEntity.setUserId(taskEntity.getUserId());
+		taskArchiveEntity.setRecurrenceMeasure(taskEntity
+				.getRecurrenceMeasure());
+		taskArchiveEntity.setRecurrenceValue(taskEntity.getRecurrenceValue());
+		taskArchiveEntity.setRecurring(taskEntity.isRecurring());
 		taskArchiveDao.save(taskArchiveEntity);
 	}
 

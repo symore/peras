@@ -16,6 +16,33 @@ public class Task {
 	private Date deadline;
 	private boolean isDoable = true;
 	private Date startDate;
+	private boolean recurring;
+	private String recurrenceMeasure;
+	private Integer recurrenceValue;
+
+	public boolean isRecurring() {
+		return recurring;
+	}
+
+	public void setRecurring(boolean recurring) {
+		this.recurring = recurring;
+	}
+
+	public String getRecurrenceMeasure() {
+		return recurrenceMeasure;
+	}
+
+	public void setRecurrenceMeasure(String recurrenceMeasure) {
+		this.recurrenceMeasure = recurrenceMeasure;
+	}
+
+	public Integer getRecurrenceValue() {
+		return recurrenceValue;
+	}
+
+	public void setRecurrenceValue(Integer recurrenceValue) {
+		this.recurrenceValue = recurrenceValue;
+	}
 
 	public Long getTaskId() {
 		return taskId;

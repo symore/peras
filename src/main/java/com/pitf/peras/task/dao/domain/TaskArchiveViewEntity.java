@@ -29,6 +29,12 @@ public class TaskArchiveViewEntity {
 	private Date doneDate;
 	@Column(name = "start_date")
 	private Date startDate;
+	@Column
+	private boolean recurring;
+	@Column(name = "recurrence_measure")
+	private String recurrenceMeasure;
+	@Column(name = "recurrence_value")
+	private Integer recurrenceValue;
 
 	public Long getTaskId() {
 		return taskId;
@@ -108,6 +114,30 @@ public class TaskArchiveViewEntity {
 
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+	}
+
+	public boolean isRecurring() {
+		return recurring;
+	}
+
+	public void setRecurring(boolean recurring) {
+		this.recurring = recurring;
+	}
+
+	public String getRecurrenceMeasure() {
+		return recurrenceMeasure;
+	}
+
+	public void setRecurrenceMeasure(String recurrenceMeasure) {
+		this.recurrenceMeasure = recurrenceMeasure;
+	}
+
+	public Integer getRecurrenceValue() {
+		return recurrenceValue;
+	}
+
+	public void setRecurrenceValue(Integer recurrenceValue) {
+		this.recurrenceValue = recurrenceValue;
 	}
 
 }

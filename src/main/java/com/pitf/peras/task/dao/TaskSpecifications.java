@@ -48,11 +48,11 @@ public class TaskSpecifications {
 			@Override
 			public Predicate toPredicate(Root<TaskViewEntity> root,
 					CriteriaQuery<?> query, CriteriaBuilder cb) {
-
-				Join<TaskViewEntity, LastTouchedCategoryViewEntity> lastTouchedJoin = root
-						.join("lastTouchedCategoryViewEntity");
 				Predicate result = cb.equal(root.get("userId"),
 						taskRetrievalParameters.getUserId());
+				Join<TaskViewEntity, LastTouchedCategoryViewEntity> lastTouchedJoin = root
+						.join("lastTouchedCategoryViewEntity");
+
 				if (taskRetrievalParameters.getCategoryIds() != null) {
 					result = cb.and(result, lastTouchedJoin
 							.in(taskRetrievalParameters.getCategoryIds()));

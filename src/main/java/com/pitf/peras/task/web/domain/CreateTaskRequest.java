@@ -14,6 +14,33 @@ public class CreateTaskRequest {
 	private Long nextTask;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date deadline;
+	private boolean recurring;
+	private String recurrenceMeasure;
+	private Integer recurrenceValue;
+
+	public boolean isRecurring() {
+		return recurring;
+	}
+
+	public void setRecurring(boolean recurring) {
+		this.recurring = recurring;
+	}
+
+	public String getRecurrenceMeasure() {
+		return recurrenceMeasure;
+	}
+
+	public void setRecurrenceMeasure(String recurrenceMeasure) {
+		this.recurrenceMeasure = recurrenceMeasure;
+	}
+
+	public Integer getRecurrenceValue() {
+		return recurrenceValue;
+	}
+
+	public void setRecurrenceValue(Integer recurrenceValue) {
+		this.recurrenceValue = recurrenceValue;
+	}
 
 	public String getSummary() {
 		return summary;

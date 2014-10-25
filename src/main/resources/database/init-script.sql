@@ -23,6 +23,9 @@ CREATE TABLE t_task
   done_date timestamp with time zone,
   start_date timestamp with time zone,
   deadline timestamp with time zone,
+  recurring boolean DEFAULT false,
+  recurrence_measure character varying(5),
+  recurrence_value integer,
   CONSTRAINT t_task_pkey PRIMARY KEY (task_id),
   CONSTRAINT fk_task_category FOREIGN KEY (category_id)
       REFERENCES t_category (category_id) MATCH SIMPLE
@@ -43,6 +46,9 @@ CREATE TABLE t_task_archive
   done_date timestamp with time zone,
   start_date timestamp with time zone,
   deadline timestamp with time zone,  
+  recurring boolean DEFAULT false,
+  recurrence_measure character varying(5),
+  recurrence_value integer,
   CONSTRAINT t_task_archive_pkey PRIMARY KEY (task_id)
 );
 
@@ -64,12 +70,12 @@ INSERT INTO t_user (username, password) VALUES('symore', 'symore');
 
 
 CREATE VIEW v_task AS
-WITH RECURSIVE search_tasks(task_id, estimation, summary, user_id, category_id, next, done, creation_date, done_date, start_date, deadline, depth) AS (
-        SELECT t.task_id, t.estimation, t.summary, t.user_id, t.category_id, t.next, t.done, t.creation_date, t.done_date, t.start_date, t.deadline, 1
+WITH RECURSIVE search_tasks(task_id, estimation, summary, user_id, category_id, next, done, creation_date, done_date, start_date, deadline, recurring, recurrence_measure, recurrence_value, depth) AS (
+        SELECT t.task_id, t.estimation, t.summary, t.user_id, t.category_id, t.next, t.done, t.creation_date, t.done_date, t.start_date, t.deadline, t.recurring, t.recurrence_measure, t.recurrence_value, 1
         FROM t_task t
         WHERE t.next is null
       UNION ALL
-        SELECT t.task_id, t.estimation, t.summary, t.user_id, t.category_id, t.next, t.done, t.creation_date, t.done_date, t.start_date, t.deadline, st.depth+1
+        SELECT t.task_id, t.estimation, t.summary, t.user_id, t.category_id, t.next, t.done, t.creation_date, t.done_date, t.start_date, t.deadline, t.recurring, t.recurrence_measure, t.recurrence_value, st.depth+1
         FROM t_task t, search_tasks st
         WHERE t.next = st.task_id
 )
@@ -77,8 +83,9 @@ SELECT distinct row_number() over () as rownum, s.* FROM search_tasks s order by
 
 
 CREATE VIEW v_task_archive AS
-SELECT t.task_id, t.estimation, t.summary, t.user_id, COALESCE ((SELECT name FROM t_category WHERE category_id = t.category_id), t.category_name), t.next, t.done, t.creation_date, t.done_date, t.start_date, t.deadline
+SELECT t.task_id, t.estimation, t.summary, t.user_id, COALESCE ((SELECT name FROM t_category WHERE category_id = t.category_id), t.category_name), t.next, t.done, t.creation_date, t.done_date, t.start_date, t.deadline, t.recurring, t.recurrence_measure, t.recurrence_value
 FROM t_task_archive t
+
 
 
 CREATE VIEW v_last_touched_category AS
@@ -90,8 +97,7 @@ SELECT  last_touched.*
             SELECT category_id, done_date FROM t_task_archive 
             UNION 
             SELECT category_id, done_date FROM t_task
-        ) AS u
-        WHERE u.done_date IS NOT NULL) AS t, t_category c
+        ) AS u) AS t, t_category c
     WHERE t.category_id = c.category_id
     GROUP BY c.category_id, c.name
 ) AS last_touched

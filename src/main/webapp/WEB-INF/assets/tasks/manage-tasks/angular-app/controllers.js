@@ -25,6 +25,7 @@ manageTasksControllers.controller('TaskListController', [ '$scope', 'Task',
 				value : 'DAYS',
 				label : 'days'
 			} ];
+			$scope.recur = false;
 
 			Task.listTasks();
 			Category.listCategories();

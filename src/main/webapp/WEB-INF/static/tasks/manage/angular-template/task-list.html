@@ -2,12 +2,13 @@
   <div class="col-md-4" ng-repeat="category in categoryList">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        {{category.name}}
+        {{category.name}}        
         <span ng-controller="ArchiveTasksController" ng-click="archiveTasks(category.categoryId)" class="glyphicon glyphicon-trash panel-menu" />
+        <span class="panel-menu">Recurring <input type="checkbox" ng-model="recur"></span>
       </div>
       <ul ui-sortable="tasklistSortable" class="list-group">
         <li id="{{task.taskId}}" ng-class="{done: task.done}" class="list-group-item"
-          ng-repeat="task in taskList | filter: {categoryId : category.categoryId} : true track by task.taskId ">
+          ng-repeat="task in taskList | filter: {categoryId : category.categoryId, recurring : recur} track by task.taskId ">
           <div class="row">
             <div class="col-md-6">
               <input ng-controller="FinishTaskController" ng-model="task.done" ng-change="finishTask(task)" type="checkbox" />

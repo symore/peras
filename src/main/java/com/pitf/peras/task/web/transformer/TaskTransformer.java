@@ -19,6 +19,9 @@ public class TaskTransformer {
 		result.setCategory(category);
 		result.setNext(createTaskRequest.getNextTask());
 		result.setDeadline(createTaskRequest.getDeadline());
+		result.setRecurrenceMeasure(createTaskRequest.getRecurrenceMeasure());
+		result.setRecurrenceValue(createTaskRequest.getRecurrenceValue());
+		result.setRecurring(createTaskRequest.isRecurring());
 		return result;
 	}
 
@@ -37,6 +40,9 @@ public class TaskTransformer {
 		result.setDeadline(task.getDeadline());
 		result.setDoable(task.isDoable());
 		result.setStartDate(task.getStartDate());
+		result.setRecurrenceMeasure(task.getRecurrenceMeasure());
+		result.setRecurrenceValue(task.getRecurrenceValue());
+		result.setRecurring(task.isRecurring());
 		return result;
 	}
 }

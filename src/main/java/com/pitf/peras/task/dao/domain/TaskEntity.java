@@ -41,6 +41,12 @@ public class TaskEntity {
 	private Date startDate;
 	@Column
 	private Date deadline;
+	@Column
+	private boolean recurring;
+	@Column(name = "recurrence_measure")
+	private String recurrenceMeasure;
+	@Column(name = "recurrence_value")
+	private Integer recurrenceValue;
 
 	public Long getNext() {
 		return next;
@@ -128,6 +134,30 @@ public class TaskEntity {
 
 	public void setDeadline(Date deadline) {
 		this.deadline = deadline;
+	}
+
+	public boolean isRecurring() {
+		return recurring;
+	}
+
+	public void setRecurring(boolean recurring) {
+		this.recurring = recurring;
+	}
+
+	public String getRecurrenceMeasure() {
+		return recurrenceMeasure;
+	}
+
+	public void setRecurrenceMeasure(String recurrenceMeasure) {
+		this.recurrenceMeasure = recurrenceMeasure;
+	}
+
+	public Integer getRecurrenceValue() {
+		return recurrenceValue;
+	}
+
+	public void setRecurrenceValue(Integer recurrenceValue) {
+		this.recurrenceValue = recurrenceValue;
 	}
 
 }

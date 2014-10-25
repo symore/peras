@@ -8,7 +8,7 @@ import com.pitf.peras.task.dao.domain.TaskEntity;
 
 public interface TaskDao extends CrudRepository<TaskEntity, Long> {
 	@Modifying
-	@Query(value = "INSERT INTO t_task_archive(task_id, estimation, summary, user_id, category_id, next, done, creation_date, done_date, start_date, deadline, category_name) select t.*, c.name FROM t_task t, t_category c WHERE t.category_id = c.category_id AND t.category_id = ? AND t.done", nativeQuery = true)
+	@Query(value = "INSERT INTO t_task_archive(task_id, estimation, summary, user_id, category_id, next, done, creation_date, done_date, start_date, deadline, recurring, recurrence_measure, recurrence_value, category_name) select t.*, c.name FROM t_task t, t_category c WHERE t.category_id = c.category_id AND t.category_id = ? AND t.done", nativeQuery = true)
 	void archiveTasks(Long categoryId);
 
 	@Modifying
