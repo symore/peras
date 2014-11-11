@@ -19,6 +19,8 @@ public class TaskViewEntity {
 	@Column
 	private String summary;
 	@Column
+	private String depth;
+	@Column
 	private Long estimation;
 	@ManyToOne
 	@JoinColumn(name = "category_id")
@@ -46,6 +48,10 @@ public class TaskViewEntity {
 	private String recurrenceMeasure;
 	@Column(name = "recurrence_value")
 	private Integer recurrenceValue;
+	@Column(name = "next_occurrence")
+	private Date nextOccurrence;
+	@Column(name = "danger_deadline")
+	private Date dangerDeadline;
 
 	public Long getNext() {
 		return next;
@@ -164,8 +170,32 @@ public class TaskViewEntity {
 		return recurrenceValue;
 	}
 
+	public Date getNextOccurrence() {
+		return nextOccurrence;
+	}
+
+	public void setNextOccurrence(Date nextOccurrence) {
+		this.nextOccurrence = nextOccurrence;
+	}
+
 	public void setRecurrenceValue(Integer recurrenceValue) {
 		this.recurrenceValue = recurrenceValue;
+	}
+
+	public Date getDangerDeadline() {
+		return dangerDeadline;
+	}
+
+	public void setDangerDeadline(Date dangerDeadline) {
+		this.dangerDeadline = dangerDeadline;
+	}
+
+	public String getDepth() {
+		return depth;
+	}
+
+	public void setDepth(String depth) {
+		this.depth = depth;
 	}
 
 }

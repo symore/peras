@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -52,6 +54,9 @@ public class TaskService {
 	@Transactional
 	public Task createTask(Task task) {
 		TaskEntity taskEntity = taskDao.save(createTaskEntity(task));
+		if (task.isRecurring()) {
+			archiveTask(taskEntity);
+		}
 		return transformTaskEntity(taskEntity);
 	}
 
@@ -208,8 +213,13 @@ public class TaskService {
 				.findByUserIdAndStartDateIsNotNull(taskRetrievalParameters
 						.getUserId());
 		if (alreadyStartedTask == null) {
-			result = retrieveTaskDao.findAll(new TaskSpecifications()
-					.getNextTask(taskRetrievalParameters));
+			List<TaskViewEntity> urgentTasks = listUrgentTaskEntities(taskRetrievalParameters);
+			if (urgentTasks.isEmpty()) {
+				result = retrieveTaskDao.findAll(new TaskSpecifications()
+						.getNextTask(taskRetrievalParameters));
+			} else {
+				result = Arrays.asList(urgentTasks.get(0));
+			}
 		} else {
 			result = Arrays.asList(alreadyStartedTask);
 		}
@@ -240,8 +250,51 @@ public class TaskService {
 	@Transactional
 	public void archiveTasks(Long categoryId) {
 		taskDao.archiveTasks(categoryId);
+
+		List<Long> archivedRecurringTasks = taskArchiveDao
+				.findRecurringArchivedTasks(categoryId);
+
+		List<Long> recurringTasksToArchive = retrieveTaskDao
+				.findRecurringTasksToArchive(categoryId);
+
+		List<Long> newRecurringTasksToArchive = new ArrayList<Long>(
+				recurringTasksToArchive);
+		newRecurringTasksToArchive.removeAll(archivedRecurringTasks);
+
+		List<Long> archivedRecurringTasksToUpdate = new ArrayList<Long>(
+				recurringTasksToArchive);
+		archivedRecurringTasksToUpdate.removeAll(newRecurringTasksToArchive);
+
+		if (!newRecurringTasksToArchive.isEmpty()) {
+			taskDao.archiveRecurringTasks(newRecurringTasksToArchive);
+		}
+
+		if (!archivedRecurringTasksToUpdate.isEmpty()) {
+			Map<Long, TaskArchiveEntity> archivedTasks = createTaskArchiveMap(taskArchiveDao
+					.findAll(archivedRecurringTasksToUpdate));
+			Iterable<TaskEntity> tasksToArchive = taskDao
+					.findAll(archivedRecurringTasksToUpdate);
+			List<TaskArchiveEntity> updatedArchives = new ArrayList<TaskArchiveEntity>();
+			for (TaskEntity task : tasksToArchive) {
+				TaskArchiveEntity taskArchiveEntity = archivedTasks.get(task
+						.getTaskId());
+				updateArchive(task, taskArchiveEntity);
+				updatedArchives.add(taskArchiveEntity);
+			}
+			taskArchiveDao.save(updatedArchives);
+		}
+
 		taskDao.eraseLastTaskNextReferenceWhenDone(categoryId);
 		taskDao.deleteDoneTasks(categoryId);
+	}
+
+	private Map<Long, TaskArchiveEntity> createTaskArchiveMap(
+			Iterable<TaskArchiveEntity> tasks) {
+		Map<Long, TaskArchiveEntity> result = new HashMap<Long, TaskArchiveEntity>();
+		for (TaskArchiveEntity task : tasks) {
+			result.put(task.getTaskId(), task);
+		}
+		return result;
 	}
 
 	@Transactional
@@ -269,6 +322,12 @@ public class TaskService {
 
 	private void archiveTask(TaskEntity taskEntity) {
 		TaskArchiveEntity taskArchiveEntity = new TaskArchiveEntity();
+		updateArchive(taskEntity, taskArchiveEntity);
+		taskArchiveDao.save(taskArchiveEntity);
+	}
+
+	private void updateArchive(TaskEntity taskEntity,
+			TaskArchiveEntity taskArchiveEntity) {
 		taskArchiveEntity.setCategory_name(taskEntity.getCategoryEntity()
 				.getName());
 		taskArchiveEntity.setCategoryId(taskEntity.getCategoryEntity()
@@ -286,14 +345,21 @@ public class TaskService {
 				.getRecurrenceMeasure());
 		taskArchiveEntity.setRecurrenceValue(taskEntity.getRecurrenceValue());
 		taskArchiveEntity.setRecurring(taskEntity.isRecurring());
-		taskArchiveDao.save(taskArchiveEntity);
 	}
 
 	public List<Task> listUrgentTasks(
 			TaskRetrievalParameters taskRetrievalParameters) {
-		List<TaskViewEntity> result = null;
-		result = retrieveTaskDao.findAll(new TaskSpecifications()
-				.getUrgentTasks(taskRetrievalParameters));
+		List<TaskViewEntity> result = listUrgentTaskEntities(taskRetrievalParameters);
 		return transformTaskEntities(result);
+	}
+
+	private List<TaskViewEntity> listUrgentTaskEntities(
+			TaskRetrievalParameters taskRetrievalParameters) {
+		List<TaskViewEntity> result = new ArrayList<TaskViewEntity>();
+		result.addAll(retrieveTaskDao.findAll(new TaskSpecifications()
+				.getRecurringTasks(taskRetrievalParameters)));
+		result.addAll(retrieveTaskDao.findAll(new TaskSpecifications()
+				.getDeadLinedTasks(taskRetrievalParameters)));
+		return result;
 	}
 }

@@ -31,7 +31,7 @@
             <div class="col-md-6">
               <div class="input-group">
                 <input class="form-control" type="text" ng-model="task.estimation" placeholder="Est." />
-                <div class="input-group-btn" dropdown is-open="status.isopen">
+                <div class="input-group-btn" dropdown is-open="estimationDropdown.isopen">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <span ng-init="task.estimationPortion=estimationPortions[0].value" ng-model="task.estimationPortion">{{task.estimationPortion}}</span>
                     <span class="caret"></span>
@@ -46,7 +46,7 @@
               </div>
 
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6" ng-class="{hidden: recur}">
               <div class="input-group" ng-controller="DatePickerController">
                 <input disabled type="text" class="form-control" datepicker-popup="dd-MM-yyyy" ng-model="task.deadline" datepicker-options="dateOptions"
                   close-text="Close" is-open="opened" placeholder="Deadline" />
@@ -56,7 +56,26 @@
                   </button>
                 </span>
               </div>
-            </div>            
+            </div> 
+            
+            <div class="input-group" ng-class="{hidden: !recur}">
+                <input type="hidden" ng-model="task.recurring" value="{{recur}}" ng-init="recur"/>
+                <input class="form-control" type="text" ng-model="task.recurrenceValue" placeholder="RecVal" />
+                <div class="input-group-btn" dropdown is-open="recurrenceDropdown.isopen">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span ng-init="task.recurrenceMeasure=recurrenceMeasures[0].value" ng-model="task.recurrenceMeasure">{{task.recurrenceMeasure}}</span>
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li class="dropdown-toggle" on-toggle="toggled(open)" ng-repeat="measure in recurrenceMeasures"
+                      ng-click="task.recurrenceMeasure=measure.value">
+                      <a href="#">{{measure.label}}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            
+                       
           </div>
           <input type="hidden" ng-value="category.categoryId" />
           <p class="form-group">          

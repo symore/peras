@@ -41,4 +41,15 @@ public class CategoryFacade {
 		User currentUser = getCurrentUser();
 		return categoryService.listCategories(currentUser.getUserId());
 	}
+
+	public List<Category> listShouldTouchCategories() {
+		User currentUser = getCurrentUser();
+		return categoryService.listShouldTouchCategories(currentUser
+				.getUserId());
+	}
+
+	public List<Category> listUntouchedCategories() {
+		User currentUser = getCurrentUser();
+		return categoryService.listUntouchedCategories(currentUser.getUserId());
+	}
 }

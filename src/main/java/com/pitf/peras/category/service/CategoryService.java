@@ -75,7 +75,7 @@ public class CategoryService {
 			} else if (warningCategories.containsKey(category.getCategoryId())) {
 				category.setCategoryStatus(CategoryStatus.WARNING);
 				category.setMessages(Arrays
-						.asList("You have %d tasks to do in 2 week"));
+						.asList("You have tasks to do in 2 week"));
 			} else {
 				category.setCategoryStatus(CategoryStatus.NICE);
 			}
@@ -112,5 +112,29 @@ public class CategoryService {
 
 	public void deleteCategory(Long categoryId) {
 		categoryDao.delete(categoryId);
+	}
+
+	public List<Category> listShouldTouchCategories(Long userId) {
+		List<CategoryEntity> categories = categoryRetrievalDao
+				.findAll(new CategorySpecifications()
+						.findShouldTouchCategories(new CategoryRetrievalParameters(
+								userId)));
+		return transformCategories(categories);
+	}
+
+	private List<Category> transformCategories(List<CategoryEntity> categories) {
+		List<Category> result = new ArrayList<Category>();
+		for (CategoryEntity categoryEntity : categories) {
+			result.add(createCategory(categoryEntity));
+		}
+		return result;
+	}
+
+	public List<Category> listUntouchedCategories(Long userId) {
+		List<CategoryEntity> categories = categoryRetrievalDao
+				.findAll(new CategorySpecifications()
+						.findUntouchedCategories(new CategoryRetrievalParameters(
+								userId)));
+		return transformCategories(categories);
 	}
 }

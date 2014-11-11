@@ -15,17 +15,27 @@
 <div ng-app="overviewApp">
   <div class="view-container">
     <div ng-controller="OverviewController">
-      <p>
-        <strong>Page:</strong> {{tableParams.page()}}
-      </p>
-      <p>
-        <strong>Count per page:</strong> {{tableParams.count()}}
-      </p>
+      <h1>You must work on these today</h1>
 
-      <table ng-table="tableParams" class="table">
+      <table ng-table="urgentTasks" class="table">
         <tr ng-repeat="task in $data">
           <td data-title="'Summary'">{{task.summary}}</td>
           <td data-title="'Category'">{{task.categoryName}}</td>
+          <td data-title="'Reason'">{{task.recurring ? 'Recurrence' : 'Deadline'}}</td>
+        </tr>
+      </table>
+      <h1>You should work on these today</h1>
+
+
+      <table ng-table="shouldTouchCategories" class="table">
+        <tr ng-repeat="category in $data">
+          <td data-title="'Name'">{{category.name}}</td>
+        </tr>
+      </table>
+      <h1>You've never worked on these</h1>
+      <table ng-table="untouchedCategories" class="table">
+        <tr ng-repeat="category in $data">
+          <td data-title="'Name'">{{category.name}}</td>
         </tr>
       </table>
     </div>

@@ -10,6 +10,7 @@ manageTasksControllers.controller('CreateTaskCtrl', [ '$scope', 'Task',
 				$scope.task.categoryId = $scope.category.categoryId;
 				// $scope.task.estimationPortion =
 				// $scope.task.estimationPortion.value;
+				$scope.task.recurring = $scope.recur;
 				Task.createTask($scope.task);
 			}
 		} ]);
@@ -24,6 +25,19 @@ manageTasksControllers.controller('TaskListController', [ '$scope', 'Task',
 			}, {
 				value : 'DAYS',
 				label : 'days'
+			} ];
+			$scope.recurrenceMeasures = [ {
+				value : 'days',
+				label : 'Days'
+			}, {
+				value : 'weeks',
+				label : 'Weeks'
+			}, {
+				value : 'months',
+				label : 'Months'
+			}, {
+				value : 'years',
+				label : 'Years'
 			} ];
 			$scope.recur = false;
 
@@ -56,7 +70,6 @@ manageTasksControllers.controller('TaskListController', [ '$scope', 'Task',
 				start : function(event, ui) {
 					oldPrevious = ui.item.prevAll()[0];
 					oldNext = ui.item.nextAll()[1];
-					console.log('started');
 				},
 				containment : "parent",// Dont let the user drag outside the
 				// parent
