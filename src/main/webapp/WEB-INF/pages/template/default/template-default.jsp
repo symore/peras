@@ -15,7 +15,7 @@
 </head>
 <body>
   <div class="container">
-    <!-- tiles:insertAttribute name="header" / -->
+    <tiles:insertAttribute name="header" />
     <div class="content">
       <tiles:insertAttribute name="menu" />
       <tiles:insertAttribute name="body" />

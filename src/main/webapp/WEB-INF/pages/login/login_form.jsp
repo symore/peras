@@ -14,7 +14,7 @@
       </p>
       <p>
         <label for="input_password">Password</label>
-        <form:input cssClass="form-control" path="password" id="input_password" placeholder="Password" />
+        <form:password cssClass="form-control" path="password" id="input_password" placeholder="Password" />
       </p>
     </div>
     <p>

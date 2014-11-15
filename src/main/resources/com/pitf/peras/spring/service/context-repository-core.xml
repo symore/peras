@@ -12,11 +12,16 @@
 
   <jpa:repositories base-package="com.pitf.peras.*.dao" entity-manager-factory-ref="entityManagerFactory" />
 
+  <bean class="java.net.URI" id="dbUrl">
+    <constructor-arg value="#{systemEnvironment['DATABASE_URL'] != null ? systemEnvironment['DATABASE_URL'] : 'postgres://peras:peras@localhost:5432/peras'}" />
+  </bean>
+
+
   <bean id="perasDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
     <property name="driverClassName" value="org.postgresql.Driver" />
-    <property name="url" value="jdbc:postgresql://localhost:5432/peras" />
-    <property name="username" value="zsczkizyzhchdy" />
-    <property name="password" value="9Yo1dUmpbmVSA0Lmx5fubwbqFj" />
+    <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }" />
+    <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }" />
+    <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }" />
   </bean>
 
   <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
@@ -39,5 +44,4 @@
       </bean>
     </property>
   </bean>
-
 </beans>
