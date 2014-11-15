@@ -24,7 +24,7 @@ CREATE TABLE t_task
   start_date timestamp with time zone,
   deadline timestamp with time zone,
   recurring boolean DEFAULT false,
-  recurrence_measure character varying(6),
+  recurrence_measure character varying(20),
   recurrence_value integer,
   CONSTRAINT t_task_pkey PRIMARY KEY (task_id),
   CONSTRAINT fk_task_category FOREIGN KEY (category_id)
@@ -47,7 +47,7 @@ CREATE TABLE t_task_archive
   start_date timestamp with time zone,
   deadline timestamp with time zone,  
   recurring boolean DEFAULT false,
-  recurrence_measure character varying(6),
+  recurrence_measure character varying(20),
   recurrence_value integer,
   CONSTRAINT t_task_archive_pkey PRIMARY KEY (task_id)
 );
@@ -58,7 +58,7 @@ CREATE TABLE t_user
   user_id bigint NOT NULL DEFAULT nextval('seq_user_id'),
   username character varying(255) NOT NULL UNIQUE,
   password character varying(255),
-  authority character varying(4) DEFAULT 'USER',
+  authority character varying(20) DEFAULT 'USER',
   enabled boolean DEFAULT true,
   CONSTRAINT t_user_pkey PRIMARY KEY (user_id)
 );
@@ -96,7 +96,7 @@ order by depth desc;
 
 CREATE VIEW v_task_archive AS
 SELECT t.task_id, t.estimation, t.summary, t.user_id, COALESCE ((SELECT name FROM t_category WHERE category_id = t.category_id), t.category_name), t.next, t.done, t.creation_date, t.done_date, t.start_date, t.deadline, t.recurring, t.recurrence_measure, t.recurrence_value
-FROM t_task_archive t
+FROM t_task_archive t;
 
 
 

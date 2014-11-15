@@ -4,9 +4,8 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 
-  <form:form cssClass="form-signin" modelAttribute="loginRequest" action="j_spring_security_check">
+  <form:form cssClass="form-signin" modelAttribute="registrationRequest" action="registration-post.html">
     <form:errors element="div" cssClass="validation-error" />
-    <input type="hidden" name="_spring_security_remember_me" value="true"/>
     <div class="form-group">
       <p>
         <label for="input_username">Username</label>
@@ -18,7 +17,6 @@
       </p>
     </div>
     <p>
-      <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+      <button type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
     </p>
   </form:form>
-  <a href="registration-form.html">Register</a>

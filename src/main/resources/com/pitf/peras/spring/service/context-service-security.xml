@@ -6,13 +6,15 @@
 
 
   <http pattern="/login.html" security="none" />
+  <http pattern="/registration-form.html" security="none" />
+  <http pattern="/registration-post.html" security="none" />
   <http pattern="/**/*.css" security="none" />
 
   <http auto-config="true" use-expressions="true">
     <anonymous enabled="false" />
-    <form-login login-page="/login.html" default-target-url="/" always-use-default-target="true" authentication-failure-url="/login.html" password-parameter="password"
-      username-parameter="username" />
-    <remember-me user-service-ref="perasUserDetailsService" key="%5deADSerrteWRT34@%ds"/>
+    <form-login login-page="/login.html" default-target-url="/" always-use-default-target="true" authentication-failure-url="/login.html"
+      password-parameter="password" username-parameter="username" />
+    <remember-me user-service-ref="perasUserDetailsService" key="%5deADSerrteWRT34@%ds" />
     <logout logout-success-url="/" />
     <intercept-url pattern="/**" access="isAuthenticated()" />
   </http>
@@ -22,18 +24,22 @@
     <beans:property name="authoritiesByUsernameQuery" value="select username,authority from t_user where username = ?" />
     <beans:property name="dataSource" ref="perasDataSource" />
   </beans:bean>
-  
+
   <beans:bean id="perasUserDetailsService" class="com.pitf.peras.security.service.DefaultAuthenticationService">
     <beans:constructor-arg ref="jdbcUserDetailsService" />
   </beans:bean>
 
   <authentication-manager>
-    <authentication-provider user-service-ref="perasUserDetailsService" />
-    <authentication-provider>
-      <user-service>
-        <user name="admin" password="admin" authorities="ADMIN" />
-        <user name="user" password="user" authorities="USER" />
-      </user-service>
+    <authentication-provider user-service-ref="perasUserDetailsService">
+      <password-encoder ref="encoder" />
     </authentication-provider>
   </authentication-manager>
+
+  <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+    <beans:constructor-arg name="strength" value="10" />
+  </beans:bean>
+
+
+
 </beans:beans>
+

@@ -34,4 +34,7 @@
     <put-attribute name="body" value="/WEB-INF/pages/login/login_form.jsp" />
   </definition>
 
+  <definition name="registration-form" extends="loginTemplate">
+    <put-attribute name="body" value="/WEB-INF/pages/registration/registration_form.jsp" />
+  </definition>
 </tiles-definitions>

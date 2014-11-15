@@ -51,4 +51,12 @@ public class UserEntity {
 		return enabled;
 	}
 
+	public void setAuthority(String authority) {
+		this.authority = authority;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 }
