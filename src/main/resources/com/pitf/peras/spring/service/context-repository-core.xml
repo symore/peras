@@ -12,10 +12,6 @@
 
   <jpa:repositories base-package="com.pitf.peras.*.dao" entity-manager-factory-ref="entityManagerFactory" />
 
-  <jdbc:initialize-database data-source="perasDataSource" ignore-failures="ALL">
-    <jdbc:script location="classpath:database/init-script.sql" />
-  </jdbc:initialize-database>
-
   <bean id="perasDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
     <property name="driverClassName" value="org.postgresql.Driver" />
     <property name="url" value="jdbc:postgresql://localhost:5432/peras" />
