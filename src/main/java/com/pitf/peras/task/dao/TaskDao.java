@@ -14,7 +14,7 @@ public interface TaskDao extends CrudRepository<TaskEntity, Long> {
 	void archiveTasks(Long categoryId);
 
 	@Modifying
-	@Query(value = "UPDATE t_task AS t1 SET next = NULL WHERE recurring = false AND category_id = ? AND EXISTS (SELECT 1 FROM t_task t2 WHERE t1.next = t2.task_id AND t2.next IS NULL AND t2.done)", nativeQuery = true)
+	@Query(value = "UPDATE t_task AS t1 SET next = NULL WHERE category_id = ? AND (NOT EXISTS (SELECT 1 FROM t_task t2 WHERE t1.next = t2.task_id) || EXISTS (SELECT 1 FROM t_task t2 WHERE t1.next = t2.task_id AND t2.next IS NULL AND t2.done))", nativeQuery = true)
 	void eraseLastTaskNextReferenceWhenDone(Long categoryId);
 
 	@Modifying
