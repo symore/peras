@@ -116,3 +116,5 @@ SELECT  last_touched.*
     GROUP BY c.category_id, c.name
 ) AS last_touched
 WHERE c.category_id = last_touched.category_id;
+
+

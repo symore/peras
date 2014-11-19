@@ -8,8 +8,6 @@ manageTasksControllers.controller('CreateTaskCtrl', [ '$scope', 'Task',
 		function($scope, Task) {
 			$scope.createTask = function(event) {
 				$scope.task.categoryId = $scope.category.categoryId;
-				// $scope.task.estimationPortion =
-				// $scope.task.estimationPortion.value;
 				$scope.task.recurring = $scope.recur;
 				Task.createTask($scope.task);
 			}
@@ -43,33 +41,41 @@ manageTasksControllers.controller('TaskListController', [ '$scope', 'Task',
 
 			Task.listTasks();
 			Category.listCategories();
-			var oldPrevious = null;
-			var oldNext = null;
 			$scope.tasklistSortable = {
+				oldPrevious : null,
+				oldNext : null,
 				update : function(event, ui) {
 					var rewiredTask = {};
-					if (oldPrevious != null) {
-						rewiredTask.oldPrevious = oldPrevious.id;
+					if (this.oldPrevious != null) {
+						rewiredTask.oldPrevious = this.oldPrevious.id;
 					}
-					if (oldNext != null) {
-						rewiredTask.oldNext = oldNext.id;
+					if (this.oldNext != null) {
+						rewiredTask.oldNext = this.oldNext.id;
 					}
 					var newPrevious = ui.item.prevAll()[0];
 					if (newPrevious != null) {
+						console.log('newprev:');
+						console.log(newPrevious);
 						rewiredTask.newPrevious = newPrevious.id;
 					}
 					var newNext = ui.item.nextAll()[0];
 					if (newNext != null) {
+						console.log('newnext:');
+						console.log(newNext);
 						rewiredTask.newNext = newNext.id;
 					}
 					rewiredTask.rewiredTask = ui.item.attr('id');
-					console.log('update-before rewire');
 					Task.rewireTask(rewiredTask);
-					console.log('after rewire');
+					this.oldPrevious = null;
+					this.oldNext = null;
 				},
 				start : function(event, ui) {
-					oldPrevious = ui.item.prevAll()[0];
-					oldNext = ui.item.nextAll()[1];
+					this.oldPrevious = ui.item.prevAll()[0];
+					console.log('oldprev:');
+					console.log(this.oldPrevious);
+					this.oldNext = ui.item.nextAll()[1];
+					console.log('oldnext:');
+					console.log(this.oldNext);
 				},
 				containment : "parent",// Dont let the user drag outside the
 				// parent

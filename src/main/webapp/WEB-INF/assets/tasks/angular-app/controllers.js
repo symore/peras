@@ -38,12 +38,10 @@ nextTaskControllers.controller('NextTaskModalController', function($scope,
 	res.$promise.then(function(nextTask) {
 		$scope.task = nextTask;
 		if (nextTask.doable) {
-			console.log('hello1');
 			$scope.hideStart = nextTask.startDate != null;
 			$scope.hideDone = !$scope.hideStart;
 			$scope.hideOk = true;
 		} else {
-			console.log('hello2');
 			$scope.hideOk = false;
 			$scope.hideStart = true;
 			$scope.hideDone = true;

@@ -27,4 +27,8 @@ public interface TaskDao extends CrudRepository<TaskEntity, Long> {
 	@Query(value = "INSERT INTO t_task_archive(task_id, estimation, summary, user_id, category_id, next, done, creation_date, done_date, start_date, deadline, recurring, recurrence_measure, recurrence_value, category_name) select t.*, c.name FROM t_task t, t_category c WHERE t.category_id = c.category_id AND t.task_id IN (?1) AND t.done AND t.recurring = true", nativeQuery = true)
 	void archiveRecurringTasks(List<Long> taskIds);
 
+	@Modifying
+	@Query(value = "UPDATE t_task SET done = false WHERE task_id IN (?1)", nativeQuery = true)
+	void cleanupArchivedRecurringTasks(List<Long> taskIds);
+
 }

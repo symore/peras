@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,10 +15,8 @@ import com.pitf.peras.category.dao.CategoryDao;
 import com.pitf.peras.category.dao.domain.CategoryEntity;
 import com.pitf.peras.category.domain.Category;
 import com.pitf.peras.task.dao.RetrieveTaskDao;
-import com.pitf.peras.task.dao.TaskArchiveDao;
 import com.pitf.peras.task.dao.TaskDao;
 import com.pitf.peras.task.dao.TaskSpecifications;
-import com.pitf.peras.task.dao.domain.TaskArchiveEntity;
 import com.pitf.peras.task.dao.domain.TaskEntity;
 import com.pitf.peras.task.dao.domain.TaskViewEntity;
 import com.pitf.peras.task.domain.NextTaskPredicates;
@@ -29,6 +25,7 @@ import com.pitf.peras.task.domain.Task;
 import com.pitf.peras.task.domain.TaskEstimation;
 import com.pitf.peras.task.domain.TaskRetrievalParameters;
 import com.pitf.peras.task.domain.TimePortion;
+import com.pitf.peras.task.service.archive.TaskArchiver;
 
 @Component
 public class TaskService {
@@ -36,19 +33,19 @@ public class TaskService {
 	private CategoryDao categoryDao;
 	private RetrieveTaskDao retrieveTaskDao;
 	private TimePortionTransformer timePortionTransformer;
-	private TaskArchiveDao taskArchiveDao;
+	private TaskArchiver taskArchiver;
 
 	@Autowired
 	public TaskService(TaskDao taskDao, CategoryDao categoryDao,
 			RetrieveTaskDao retrieveTaskDao,
 			TimePortionTransformer timePortionTransformer,
-			TaskArchiveDao taskArchiveDao) {
+			TaskArchiver taskArchiver) {
 		super();
 		this.taskDao = taskDao;
 		this.categoryDao = categoryDao;
 		this.retrieveTaskDao = retrieveTaskDao;
 		this.timePortionTransformer = timePortionTransformer;
-		this.taskArchiveDao = taskArchiveDao;
+		this.taskArchiver = taskArchiver;
 	}
 
 	@Transactional
@@ -249,52 +246,7 @@ public class TaskService {
 
 	@Transactional
 	public void archiveTasks(Long categoryId) {
-		taskDao.archiveTasks(categoryId);
-
-		List<Long> archivedRecurringTasks = taskArchiveDao
-				.findRecurringArchivedTasks(categoryId);
-
-		List<Long> recurringTasksToArchive = retrieveTaskDao
-				.findRecurringTasksToArchive(categoryId);
-
-		List<Long> newRecurringTasksToArchive = new ArrayList<Long>(
-				recurringTasksToArchive);
-		newRecurringTasksToArchive.removeAll(archivedRecurringTasks);
-
-		List<Long> archivedRecurringTasksToUpdate = new ArrayList<Long>(
-				recurringTasksToArchive);
-		archivedRecurringTasksToUpdate.removeAll(newRecurringTasksToArchive);
-
-		if (!newRecurringTasksToArchive.isEmpty()) {
-			taskDao.archiveRecurringTasks(newRecurringTasksToArchive);
-		}
-
-		if (!archivedRecurringTasksToUpdate.isEmpty()) {
-			Map<Long, TaskArchiveEntity> archivedTasks = createTaskArchiveMap(taskArchiveDao
-					.findAll(archivedRecurringTasksToUpdate));
-			Iterable<TaskEntity> tasksToArchive = taskDao
-					.findAll(archivedRecurringTasksToUpdate);
-			List<TaskArchiveEntity> updatedArchives = new ArrayList<TaskArchiveEntity>();
-			for (TaskEntity task : tasksToArchive) {
-				TaskArchiveEntity taskArchiveEntity = archivedTasks.get(task
-						.getTaskId());
-				updateArchive(task, taskArchiveEntity);
-				updatedArchives.add(taskArchiveEntity);
-			}
-			taskArchiveDao.save(updatedArchives);
-		}
-
-		taskDao.eraseLastTaskNextReferenceWhenDone(categoryId);
-		taskDao.deleteDoneTasks(categoryId);
-	}
-
-	private Map<Long, TaskArchiveEntity> createTaskArchiveMap(
-			Iterable<TaskArchiveEntity> tasks) {
-		Map<Long, TaskArchiveEntity> result = new HashMap<Long, TaskArchiveEntity>();
-		for (TaskArchiveEntity task : tasks) {
-			result.put(task.getTaskId(), task);
-		}
-		return result;
+		taskArchiver.archiveTasks(categoryId);
 	}
 
 	@Transactional
@@ -309,7 +261,9 @@ public class TaskService {
 			previous.setNext(taskEntity.getNext());
 			taskDao.save(previous);
 		}
-		taskDao.delete(taskId);
+		if (!taskEntity.isRecurring()) {
+			taskDao.delete(taskId);
+		}
 		return transformTaskEntity(result);
 	}
 
@@ -321,30 +275,7 @@ public class TaskService {
 	}
 
 	private void archiveTask(TaskEntity taskEntity) {
-		TaskArchiveEntity taskArchiveEntity = new TaskArchiveEntity();
-		updateArchive(taskEntity, taskArchiveEntity);
-		taskArchiveDao.save(taskArchiveEntity);
-	}
-
-	private void updateArchive(TaskEntity taskEntity,
-			TaskArchiveEntity taskArchiveEntity) {
-		taskArchiveEntity.setCategory_name(taskEntity.getCategoryEntity()
-				.getName());
-		taskArchiveEntity.setCategoryId(taskEntity.getCategoryEntity()
-				.getCategoryId());
-		taskArchiveEntity.setCreationDate(taskEntity.getCreationDate());
-		taskArchiveEntity.setDone(taskEntity.isDone());
-		taskArchiveEntity.setDoneDate(taskEntity.getDoneDate());
-		taskArchiveEntity.setEstimation(taskEntity.getEstimation());
-		taskArchiveEntity.setNext(taskEntity.getNext());
-		taskArchiveEntity.setStartDate(taskEntity.getStartDate());
-		taskArchiveEntity.setSummary(taskEntity.getSummary());
-		taskArchiveEntity.setTaskId(taskEntity.getTaskId());
-		taskArchiveEntity.setUserId(taskEntity.getUserId());
-		taskArchiveEntity.setRecurrenceMeasure(taskEntity
-				.getRecurrenceMeasure());
-		taskArchiveEntity.setRecurrenceValue(taskEntity.getRecurrenceValue());
-		taskArchiveEntity.setRecurring(taskEntity.isRecurring());
+		taskArchiver.archiveTask(taskEntity);
 	}
 
 	public List<Task> listUrgentTasks(
