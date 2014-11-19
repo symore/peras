@@ -35,6 +35,8 @@ public class TaskSpecifications {
 							root.<Long> get("estimation"),
 							taskRetrievalParameters.getAvailableTime()));
 				}
+				result = cb.and(result,
+						cb.equal(root.<Boolean> get("recurring"), false));
 				return result;
 			}
 		};

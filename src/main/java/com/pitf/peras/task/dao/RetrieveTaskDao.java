@@ -18,7 +18,8 @@ public interface RetrieveTaskDao extends CrudRepository<TaskViewEntity, Long>,
 			@Param(value = "categoryIds") List<Long> categoryIds,
 			@Param(value = "userId") Long userId);
 
-	TaskViewEntity findByUserIdAndStartDateIsNotNull(Long userId);
+	TaskViewEntity findByUserIdAndStartDateIsNotNull(
+			Long userId);
 
 	@Query(value = "SELECT taskId FROM v_task WHERE categoryEntity.categoryId = :categoryId AND recurring = true AND done = true")
 	List<Long> findRecurringTasksToArchive(

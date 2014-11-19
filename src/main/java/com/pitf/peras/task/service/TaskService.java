@@ -263,8 +263,17 @@ public class TaskService {
 		}
 		if (!taskEntity.isRecurring()) {
 			taskDao.delete(taskId);
+		} else {
+			reopenRecurring(taskEntity);
 		}
 		return transformTaskEntity(result);
+	}
+
+	private void reopenRecurring(TaskEntity taskEntity) {
+		taskEntity.setDone(false);
+		taskEntity.setStartDate(null);
+		taskEntity.setDoneDate(null);
+		taskDao.save(taskEntity);
 	}
 
 	private TaskEntity doFinishTask(Long taskId) {
