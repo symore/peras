@@ -158,13 +158,10 @@ public class TaskService {
 	@Transactional
 	public void deleteTask(Long taskId) {
 		TaskEntity taskEntity = taskDao.findOne(taskId);
-		if (taskEntity.getNext() == null) {
-			TaskEntity previousTask = taskDao.findByNext(taskId);
-			if (previousTask != null) {
-				previousTask.setNext(null);
-				taskDao.save(previousTask);
-			}
-
+		TaskEntity previousTask = taskDao.findByNext(taskId);
+		if (previousTask != null) {
+			previousTask.setNext(taskEntity.getNext());
+			taskDao.save(previousTask);
 		}
 		taskDao.delete(taskId);
 	}

@@ -85,7 +85,7 @@ FROM (
 ) AS task_order 
     LEFT OUTER JOIN ( 
 	    SELECT last_done_tasks.next_occurrence, arch.* FROM ( 
-	        SELECT task_id, max(date_trunc('day', coalesce(done_date, now()-'1 day'::interval)) + (recurrence_value || ' ' || recurrence_measure)::interval) AS next_occurrence FROM t_task_archive
+	        SELECT task_id, max(date_trunc('day', coalesce(done_date, creation_date)) + (recurrence_value || ' ' || recurrence_measure)::interval) AS next_occurrence FROM t_task_archive
 	        WHERE recurring = true
 	        GROUP BY task_id
 	    ) AS last_done_tasks, t_task_archive arch
