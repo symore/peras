@@ -93,7 +93,7 @@ public class TaskArchiver {
 				next = undoneTasks.get(i + 1);
 			}
 			if (next != null) {
-				if (!current.getNext().equals(next.getTaskId())) {
+				if (!next.getTaskId().equals(current.getNext())) {
 					tasksTree.put(current.getTaskId(), next.getTaskId());
 				}
 			} else if (current.getNext() != null) {
