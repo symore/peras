@@ -117,4 +117,12 @@ SELECT  last_touched.*
 ) AS last_touched
 WHERE c.category_id = last_touched.category_id;
 
+CREATE TABLE t_day_plan
+(
+  task_id bigint NOT NULL,
+  date_added timestamp with time zone NOT NULL DEFAULT now(),
+  user_id bigint,
+  CONSTRAINT t_day_plan_pkey PRIMARY KEY (task_id)
+);
+
 

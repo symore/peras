@@ -11,25 +11,21 @@ import com.pitf.peras.task.web.domain.TaskView;
 import com.pitf.peras.task.web.transformer.TaskTransformer;
 
 @RestController
-public class ListTasksController {
+public class ListTaskFromDayPlanController {
 	private TaskFacade taskFacade;
 	private TaskTransformer taskTransformer;
 
 	@Autowired
-	public ListTasksController(TaskFacade taskFacade,
+	public ListTaskFromDayPlanController(TaskFacade taskFacade,
 			TaskTransformer taskTransformer) {
 		super();
 		this.taskFacade = taskFacade;
 		this.taskTransformer = taskTransformer;
 	}
 
-	@RequestMapping("${listTasksController}")
+	@RequestMapping("${listTaskFromDayPlanController}")
 	public List<TaskView> taskList() {
-		return listTasks();
+		return taskTransformer
+				.transformTasks(taskFacade.listTasksFromDayPlan());
 	}
-
-	private List<TaskView> listTasks() {
-		return taskTransformer.transformTasks(taskFacade.listTasks());
-	}
-
 }

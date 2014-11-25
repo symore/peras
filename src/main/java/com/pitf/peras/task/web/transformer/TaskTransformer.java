@@ -1,5 +1,8 @@
 package com.pitf.peras.task.web.transformer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.pitf.peras.category.domain.Category;
@@ -9,6 +12,15 @@ import com.pitf.peras.task.web.domain.TaskView;
 
 @Component
 public class TaskTransformer {
+
+	public List<TaskView> transformTasks(List<Task> tasks) {
+		List<TaskView> result = new ArrayList<>();
+		for (Task task : tasks) {
+			result.add(transformTask(task));
+		}
+		return result;
+	}
+
 	public Task transformTask(CreateTaskRequest createTaskRequest) {
 		Task result = new Task();
 		result.setEstimation(createTaskRequest.getEstimation());

@@ -299,4 +299,9 @@ public class TaskService {
 				.getDeadLinedTasks(taskRetrievalParameters)));
 		return result;
 	}
+
+	public List<Task> listTasksById(List<Long> taskIds) {
+		return transformTaskEntities(retrieveTaskDao.findAll(taskIds));
+
+	}
 }

@@ -13,6 +13,7 @@ import com.pitf.peras.task.domain.RewiredTask;
 import com.pitf.peras.task.domain.Task;
 import com.pitf.peras.task.domain.TaskQuery;
 import com.pitf.peras.task.domain.TaskRetrievalParameters;
+import com.pitf.peras.task.service.DayPlanService;
 import com.pitf.peras.task.service.TaskService;
 
 @Component
@@ -20,15 +21,17 @@ public class TaskFacade {
 	private TaskService taskService;
 	private AuthenticationService authenticationService;
 	private CategoryService categoryService;
+	private DayPlanService dayPlanService;
 
 	@Autowired
 	public TaskFacade(TaskService taskService,
 			AuthenticationService authenticationService,
-			CategoryService categoryService) {
+			CategoryService categoryService, DayPlanService dayPlanService) {
 		super();
 		this.taskService = taskService;
 		this.authenticationService = authenticationService;
 		this.categoryService = categoryService;
+		this.dayPlanService = dayPlanService;
 	}
 
 	public Task createTask(Task task) {
@@ -96,5 +99,11 @@ public class TaskFacade {
 
 	public Task finishTask(Long taskId) {
 		return taskService.finishTask(taskId);
+	}
+
+	public List<Task> listTasksFromDayPlan() {
+		List<Long> taskIds = dayPlanService
+				.listTaskIdsFromDayPlan(getCurrentUser().getUserId());
+		return taskService.listTasksById(taskIds);
 	}
 }
