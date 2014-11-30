@@ -253,12 +253,12 @@ public class TaskService {
 
 		archiveTask(taskEntity);
 
-		TaskEntity previous = taskDao.findByNext(taskId);
-		if (previous != null) {
-			previous.setNext(taskEntity.getNext());
-			taskDao.save(previous);
-		}
 		if (!taskEntity.isRecurring()) {
+			TaskEntity previous = taskDao.findByNext(taskId);
+			if (previous != null) {
+				previous.setNext(taskEntity.getNext());
+				taskDao.save(previous);
+			}
 			taskDao.delete(taskId);
 		} else {
 			reopenRecurring(taskEntity);
